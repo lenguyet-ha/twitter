@@ -20,5 +20,6 @@ export const USERS_MESSAGES = {
   PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50: 'password length must be from 6 to 50',
   WRONG_EMAIL_OR_PASSWORD: 'Wrong email or password',
   LOGIN_SUCCESS: 'Login success',
-  REGISTER_SUCCESS: 'Register success'
+  REGISTER_SUCCESS: 'Register success',
+  TOKEN_IS_REQUIRED: 'Token is required'
 } as const

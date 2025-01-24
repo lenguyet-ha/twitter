@@ -21,3 +21,13 @@ export function signToken({
     })
   })
 }
+export function verifyToken(token: string) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(decoded)
+    })
+  })
+}
