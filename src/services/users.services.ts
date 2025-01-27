@@ -1,5 +1,6 @@
 import exp from 'constants'
 import { config } from 'dotenv'
+import { update } from 'lodash'
 import { ObjectId } from 'mongodb'
 import { TokenType, UserVerifyStatus } from '~/constants/enum'
 import { USERS_MESSAGES } from '~/constants/message'
@@ -29,7 +30,7 @@ class UsersService {
         user_id,
         token_type: TokenType.RefreshToken
       },
-      privateKey: process.env.JWT_SECRET_REFREH_TOKEN as string,
+      privateKey: process.env.JWT_SECRET_REFRESH_TOKEN as string,
       options: {
         expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN
       }
@@ -104,6 +105,21 @@ class UsersService {
     return {
       access_token,
       refresh_token
+    }
+  }
+  async resendVerifyEmail(user_id: string) {
+    const email_verify_token = await this.signEmailVerifyToken(user_id)
+    await databaseService.users.updateOne(
+      { _id: new ObjectId(user_id) },
+      {
+        $set: {
+          email_verify_token,
+          updated_at: new Date()
+        }
+      }
+    )
+    return {
+      message: USERS_MESSAGES.RESEND_VERIFY_EMAIL
     }
   }
 }
