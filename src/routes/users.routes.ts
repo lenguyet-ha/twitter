@@ -1,8 +1,15 @@
+import { verify } from 'crypto'
 import { Router } from 'express'
-import { loginController, logoutController, registerController } from '~/controllers/users.controllers'
+import {
+  emailVerifyController,
+  loginController,
+  logoutController,
+  registerController
+} from '~/controllers/users.controllers'
 
 import {
   accessTokenValidator,
+  emailTokenValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator
@@ -13,4 +20,5 @@ const usersRouter = Router()
 usersRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
 usersRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
 usersRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequestHandler(logoutController))
+usersRouter.post('/verify-email', emailTokenValidator, wrapRequestHandler(emailVerifyController))
 export default usersRouter
