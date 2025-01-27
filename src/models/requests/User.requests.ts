@@ -18,6 +18,9 @@ export interface EmailVerifyReqBody {
 export interface LogoutReqBody {
   refresh_token: string
 }
+export interface ForgotPasswordReqBody {
+  email: string
+}
 
 export interface TokenPayload {
   user_id: string

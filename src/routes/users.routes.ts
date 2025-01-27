@@ -2,6 +2,7 @@ import { verify } from 'crypto'
 import { Router } from 'express'
 import {
   emailVerifyController,
+  forgotPasswordController,
   loginController,
   logoutController,
   registerController,
@@ -11,6 +12,7 @@ import {
 import {
   accessTokenValidator,
   emailTokenValidator,
+  forgotPasswordTokenValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator
@@ -23,4 +25,5 @@ usersRouter.post('/register', registerValidator, wrapRequestHandler(registerCont
 usersRouter.post('/logout', accessTokenValidator, refreshTokenValidator, wrapRequestHandler(logoutController))
 usersRouter.post('/verify-email', emailTokenValidator, wrapRequestHandler(emailVerifyController))
 usersRouter.post('/resend-verify-email', accessTokenValidator, wrapRequestHandler(resendVerifyEmailController))
+usersRouter.post('/forgot-password', forgotPasswordTokenValidator, wrapRequestHandler(forgotPasswordController))
 export default usersRouter
