@@ -136,6 +136,7 @@ class UsersService {
   }
   async forgotPassword(user_id: string) {
     const forgot_password_token = await this.signForgotPasswordToken(user_id)
+    console.log(forgot_password_token)
     await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, { $set: { forgot_password_token } })
     return {
       message: USERS_MESSAGES.CHECK_EMAIL_TO_RESET_PASSWORD
