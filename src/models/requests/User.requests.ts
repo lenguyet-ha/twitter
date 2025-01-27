@@ -30,3 +30,9 @@ export interface TokenPayload {
   user_id: string
   token_type: TokenType
 }
+
+export interface resetPasswordReqBody {
+  password: string
+  confirmPassword: string
+  forgotPaswordToken: string
+}
