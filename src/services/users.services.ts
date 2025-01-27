@@ -147,7 +147,7 @@ class UsersService {
       { _id: new ObjectId(user_id) },
       {
         $set: {
-          password,
+          password: hashPassword(password),
           update_at: new Date()
         }
       }
