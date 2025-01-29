@@ -9,6 +9,7 @@ import { ErrorWithStatus } from '~/models/Error'
 
 import {
   EmailVerifyReqBody,
+  FollowReqBody,
   ForgotPasswordReqBody,
   GetProfileReqParams,
   LoginReqBody,
@@ -158,4 +159,13 @@ export const getProfileController = async (
   const { username } = req.params
   const user = await usersService.getProfile(username)
   res.json(user)
+}
+export const followController = async (
+  req: Request<ParamsDictionary, any, FollowReqBody>,
+  res: Response
+): Promise<void> => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const { followed_id } = req.body
+  const result = await usersService.follow(user_id, followed_id)
+  res.json(result)
 }

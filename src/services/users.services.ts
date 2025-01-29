@@ -9,6 +9,7 @@ import { HTTP_STATUS } from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
 import { ErrorWithStatus } from '~/models/Error'
 import { RegisterReqBody, UpdateMeReqBody } from '~/models/requests/User.requests'
+import Follower from '~/models/schemas/Follower.schema'
 import User from '~/models/schemas/User.schema'
 import databaseService from '~/services/database.services'
 import { hashPassword } from '~/utils/crypto'
@@ -221,6 +222,21 @@ class UsersService {
       throw new ErrorWithStatus({ message: USERS_MESSAGES.USER_NOT_FOUND, status: HTTP_STATUS.NOT_FOUND })
     }
     return user
+  }
+  async follow(user_id: string, followed_id: string) {
+    const follower = await databaseService.followers.findOne({
+      user_id: new ObjectId(user_id),
+      followed_id: new ObjectId(followed_id)
+    })
+    if (follower) {
+      return {
+        message: USERS_MESSAGES.USER_ALREADY_FOLLOWED
+      }
+    }
+    await databaseService.followers.insertOne(
+      new Follower({ user_id: new ObjectId(user_id), followed_id: new ObjectId(followed_id) })
+    )
+    return { message: USERS_MESSAGES.FOLLOW_SUCCESS }
   }
 }
 

@@ -41,5 +41,7 @@ export const USERS_MESSAGES = {
   WEBSITE_LENGTH_MUST_BE_FROM_1_TO_200: 'Website length must be from 1 to 200',
   USERNAME_LENGTH_MUST_BE_FROM_1_TO_50: 'Username length must be from 1 to 50',
   IMAGE_URL_MUST_BE_STRING: 'Image url must be a string',
-  IMAGE_URL_LENGTH: 'Image url length must be from 1 to 400'
+  IMAGE_URL_LENGTH: 'Image url length must be from 1 to 400',
+  USER_ALREADY_FOLLOWED: 'User already followed',
+  FOLLOW_SUCCESS: 'Follow success'
 } as const
