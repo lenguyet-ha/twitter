@@ -15,6 +15,7 @@ import {
   RegisterReqBody,
   resetPasswordReqBody,
   TokenPayload,
+  UpdateMeReqBody,
   VerifyForgotPasswordReqBody
 } from '~/models/requests/User.requests'
 import User from '~/models/schemas/User.schema'
@@ -27,7 +28,7 @@ export const loginController = async (
 ): Promise<void> => {
   const user = req.user as User
   const user_id = user._id as ObjectId
-  const result = await usersService.login(user_id.toString())
+  const result = await usersService.login({ user_id: user_id.toString(), verify: user.verify })
   res.json({
     message: USERS_MESSAGES.LOGIN_SUCCESS,
     result
@@ -59,7 +60,7 @@ export const emailVerifyController = async (
   res: Response
 ): Promise<void> => {
   const { user_id } = req.decoded_email_token as TokenPayload
-  const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+  const user = (await databaseService.users.findOne({ _id: new ObjectId(user_id) })) as User
   if (!user) {
     res.json({
       message: USERS_MESSAGES.USER_NOT_FOUND,
@@ -71,7 +72,7 @@ export const emailVerifyController = async (
     })
   }
   console.log(user)
-  const result = await usersService.verifyEmail(user_id)
+  const result = await usersService.verifyEmail({ user_id: user_id.toString(), verify: user.verify })
   res.json({
     message: USERS_MESSAGES.VERIFY_EMAIL_SUCCESS,
     result
@@ -91,7 +92,7 @@ export const resendVerifyEmailController = async (req: Request, res: Response): 
       message: USERS_MESSAGES.EMAIL_ALREADY_VERIFIED_BEFORE
     })
   }
-  const result = await usersService.resendVerifyEmail(user_id)
+  const result = await usersService.resendVerifyEmail({ user_id: user_id.toString(), verify: user.verify })
   res.json(result)
 }
 
@@ -101,7 +102,7 @@ export const forgotPasswordController = async (
 ): Promise<void> => {
   const user = req.user as User
   const user_id = user._id
-  const result = await usersService.forgotPassword(user_id.toString())
+  const result = await usersService.forgotPassword({ user_id: user_id.toString(), verify: user.verify })
   res.json({
     result
   })
@@ -136,5 +137,15 @@ export const getMeController = async (req: Request, res: Response): Promise<void
       }
     }
   )
+  res.json(result)
+}
+
+export const updateMeController = async (
+  req: Request<ParamsDictionary, any, UpdateMeReqBody>,
+  res: Response
+): Promise<void> => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const { body } = req
+  const result = await usersService.updateMe(user_id, body)
   res.json(result)
 }

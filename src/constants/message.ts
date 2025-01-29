@@ -30,5 +30,16 @@ export const USERS_MESSAGES = {
   CHECK_EMAIL_TO_RESET_PASSWORD: 'Check email to reset password',
   INVALID_FORGOT_PASSWORD_TOKEN: 'Invalid forgot passsword token',
   VERIFIED_FORGOT_PASSWORD_TOKEN: 'Verify forgot password token successly',
-  RESET_PASSWORD_SUCCESS: 'Reset password successly'
+  RESET_PASSWORD_SUCCESS: 'Reset password successly',
+  USER_NOT_VERIFIED: 'User not verified',
+  BIO_LENGTH_MUST_BE_FROM_1_TO_200: 'Bio length must be from 1 to 200',
+  BIO_MUST_BE_STRING: 'Bio must be a string',
+  LOCATION_MUST_BE_STRING: 'Location must be a string',
+  WEBSITE_MUST_BE_STRING: 'Website must be a string',
+  USERNAME_MUST_BE_STRING: 'Username must be a string',
+  LOCATION_LENGTH_MUST_BE_FROM_1_TO_200: 'Location length must be from 1 to 200',
+  WEBSITE_LENGTH_MUST_BE_FROM_1_TO_200: 'Website length must be from 1 to 200',
+  USERNAME_LENGTH_MUST_BE_FROM_1_TO_50: 'Username length must be from 1 to 50',
+  IMAGE_URL_MUST_BE_STRING: 'Image url must be a string',
+  IMAGE_URL_LENGTH: 'Image url length must be from 1 to 400'
 } as const

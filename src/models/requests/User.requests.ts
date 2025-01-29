@@ -1,4 +1,4 @@
-import { TokenType } from '~/constants/enum'
+import { TokenType, UserVerifyStatus } from '~/constants/enum'
 
 export interface RegisterReqBody {
   name: string
@@ -29,10 +29,22 @@ export interface VerifyForgotPasswordReqBody {
 export interface TokenPayload {
   user_id: string
   token_type: TokenType
+  verify: UserVerifyStatus
 }
 
 export interface resetPasswordReqBody {
   password: string
   confirmPassword: string
   forgotPaswordToken: string
+}
+
+export interface UpdateMeReqBody {
+  name?: string
+  date_of_birth?: Date
+  bio?: string
+  avatar?: string
+  cover_photo?: string
+  username?: string
+  website?: string
+  location?: string
 }
