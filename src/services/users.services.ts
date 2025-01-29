@@ -206,40 +206,22 @@ class UsersService {
     return user
   }
   async getProfile(username: string) {
-    try {
-      const user = await databaseService.users.findOne(
-        { username },
-        {
-          projection: {
-            password: 0,
-            email_verify_token: 0,
-            forgot_password_token: 0
-          }
+    const user = await databaseService.users.findOne(
+      { username },
+      {
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0
         }
-      )
-      return user
-    } catch (error) {
+      }
+    )
+
+    if (user === null) {
       throw new ErrorWithStatus({ message: USERS_MESSAGES.USER_NOT_FOUND, status: HTTP_STATUS.NOT_FOUND })
     }
+    return user
   }
-  // async getProfile(username: string) {
-  //   const user = await databaseService.users.findOne(
-  //     { username },
-  //     {
-  //       projection: {
-  //         password: 0,
-  //         email_verify_token: 0,
-  //         forgot_password_token: 0
-  //       }
-  //     }
-  //   )
-
-  //   if (!user) {
-  //     throw new ErrorWithStatus({ message: USERS_MESSAGES.USER_NOT_FOUND, status: HTTP_STATUS.NOT_FOUND })
-  //   }
-
-  //   return user
-  // }
 }
 
 const usersService = new UsersService()
