@@ -3,8 +3,11 @@ import { config } from 'dotenv'
 import e from 'express'
 import _, { update } from 'lodash'
 import { ObjectId } from 'mongodb'
+
 import { TokenType, UserVerifyStatus } from '~/constants/enum'
+import { HTTP_STATUS } from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
+import { ErrorWithStatus } from '~/models/Error'
 import { RegisterReqBody, UpdateMeReqBody } from '~/models/requests/User.requests'
 import User from '~/models/schemas/User.schema'
 import databaseService from '~/services/database.services'
@@ -79,6 +82,7 @@ class UsersService {
     await databaseService.users.insertOne(
       new User({
         ...payload,
+        username: `user${user_id.toString()}`,
         email_verify_token,
         _id: user_id,
         password: hashPassword(payload.password)
@@ -201,6 +205,41 @@ class UsersService {
     )
     return user
   }
+  async getProfile(username: string) {
+    try {
+      const user = await databaseService.users.findOne(
+        { username },
+        {
+          projection: {
+            password: 0,
+            email_verify_token: 0,
+            forgot_password_token: 0
+          }
+        }
+      )
+      return user
+    } catch (error) {
+      throw new ErrorWithStatus({ message: USERS_MESSAGES.USER_NOT_FOUND, status: HTTP_STATUS.NOT_FOUND })
+    }
+  }
+  // async getProfile(username: string) {
+  //   const user = await databaseService.users.findOne(
+  //     { username },
+  //     {
+  //       projection: {
+  //         password: 0,
+  //         email_verify_token: 0,
+  //         forgot_password_token: 0
+  //       }
+  //     }
+  //   )
+
+  //   if (!user) {
+  //     throw new ErrorWithStatus({ message: USERS_MESSAGES.USER_NOT_FOUND, status: HTTP_STATUS.NOT_FOUND })
+  //   }
+
+  //   return user
+  // }
 }
 
 const usersService = new UsersService()

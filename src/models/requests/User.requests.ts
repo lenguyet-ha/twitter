@@ -48,3 +48,6 @@ export interface UpdateMeReqBody {
   website?: string
   location?: string
 }
+export interface GetProfileReqParams {
+  username: string
+}

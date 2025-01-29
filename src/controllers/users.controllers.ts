@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
-import { Dictionary, ParamsDictionary } from 'express-serve-static-core'
+import { ParamsDictionary } from 'express-serve-static-core'
 import { ObjectId } from 'mongodb'
-import { PassThrough } from 'stream'
+
 import { UserVerifyStatus } from '~/constants/enum'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
@@ -10,6 +10,7 @@ import { ErrorWithStatus } from '~/models/Error'
 import {
   EmailVerifyReqBody,
   ForgotPasswordReqBody,
+  GetProfileReqParams,
   LoginReqBody,
   LogoutReqBody,
   RegisterReqBody,
@@ -148,4 +149,13 @@ export const updateMeController = async (
   const { body } = req
   const result = await usersService.updateMe(user_id, body)
   res.json(result)
+}
+export const getProfileController = async (
+  req: Request<GetProfileReqParams>,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const { username } = req.params
+  const user = await usersService.getProfile(username)
+  res.json(user)
 }
