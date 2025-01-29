@@ -99,10 +99,9 @@ class UsersService {
     }
   }
   async login({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
-    const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
     const [access_token, refresh_token] = await this.signAccessAndRefreshToken({
       user_id: user_id.toString(),
-      verify: user?.verify as UserVerifyStatus
+      verify
     })
     await databaseService.refresh_tokens.insertOne({ user_id: new ObjectId(user_id), token: refresh_token })
     return {
