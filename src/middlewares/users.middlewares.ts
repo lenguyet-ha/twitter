@@ -6,6 +6,7 @@ import { ObjectId } from 'mongodb'
 import { UserVerifyStatus } from '~/constants/enum'
 import { HTTP_STATUS } from '~/constants/httpStatus'
 import { USERS_MESSAGES } from '~/constants/message'
+import { userNameRegex } from '~/constants/regex'
 import { ErrorWithStatus } from '~/models/Error'
 import { TokenPayload } from '~/models/requests/User.requests'
 import databaseService from '~/services/database.services'
@@ -417,7 +418,28 @@ export const updateMeValidator = validate(
           options: { min: 1, max: 200 },
           errorMessage: USERS_MESSAGES.USERNAME_LENGTH_MUST_BE_FROM_1_TO_50
         },
-        trim: true
+        trim: true,
+        custom: {
+          options: async (value: string) => {
+            if (!userNameRegex.test(value)) {
+              return Promise.reject(
+                new ErrorWithStatus({
+                  message: USERS_MESSAGES.USERNAME_INVALID,
+                  status: HTTP_STATUS.BAD_REQUEST
+                })
+              )
+            }
+            const user = await databaseService.users.findOne({ username: value })
+            if (user) {
+              return Promise.reject(
+                new ErrorWithStatus({
+                  message: USERS_MESSAGES.USERNAME_EXIST,
+                  status: HTTP_STATUS.BAD_REQUEST
+                })
+              )
+            }
+          }
+        }
       },
       avatar: imageSchema,
       cover_photo: imageSchema
@@ -456,22 +478,6 @@ export const unfollowValidator = validate(
     {
       user_id: {
         custom: {
-          // options: async (value: string) => {
-          //   if (!ObjectId.isValid(value)) {
-          //     throw new ErrorWithStatus({
-          //       message: USERS_MESSAGES.INVALID_USER_ID,
-          //       status: HTTP_STATUS.NOT_FOUND
-          //     })
-          //   }
-          //   const followed_user = await databaseService.users.findOne({ _id: new ObjectId(value) })
-          //   console.log('followed_user:', followed_user)
-          //   if (followed_user === null) {
-          //     throw new ErrorWithStatus({
-          //       message: USERS_MESSAGES.USER_NOT_FOUND,
-          //       status: HTTP_STATUS.NOT_FOUND
-          //     })
-          //   }
-          // }
           options: async (value: string) => {
             if (!ObjectId.isValid(value)) {
               return Promise.reject(
