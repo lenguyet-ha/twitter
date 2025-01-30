@@ -11,6 +11,7 @@ import {
   resendVerifyEmailController,
   resetPasswordController,
   updateMeController,
+  unfollowController,
   verifyForgotPasswordController
 } from '~/controllers/users.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
@@ -25,6 +26,7 @@ import {
   registerValidator,
   resetPasswordValidator,
   updateMeValidator,
+  unfollowValidator,
   verifiedUserValidator,
   verifyForgotPasswordTokenValidator
 } from '~/middlewares/users.middlewares'
@@ -69,5 +71,12 @@ usersRouter.post(
   verifiedUserValidator,
   followValidater,
   wrapRequestHandler(followController)
+)
+usersRouter.delete(
+  '/follow/:user_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  unfollowValidator,
+  wrapRequestHandler(unfollowController)
 )
 export default usersRouter

@@ -433,7 +433,7 @@ export const followValidater = validate(
           options: async (value: string) => {
             if (!ObjectId.isValid(value)) {
               throw new ErrorWithStatus({
-                message: USERS_MESSAGES.USER_NOT_FOUND,
+                message: USERS_MESSAGES.INVALID_USER_ID,
                 status: HTTP_STATUS.NOT_FOUND
               })
             }
@@ -449,5 +449,53 @@ export const followValidater = validate(
       }
     },
     ['body']
+  )
+)
+export const unfollowValidator = validate(
+  checkSchema(
+    {
+      user_id: {
+        custom: {
+          // options: async (value: string) => {
+          //   if (!ObjectId.isValid(value)) {
+          //     throw new ErrorWithStatus({
+          //       message: USERS_MESSAGES.INVALID_USER_ID,
+          //       status: HTTP_STATUS.NOT_FOUND
+          //     })
+          //   }
+          //   const followed_user = await databaseService.users.findOne({ _id: new ObjectId(value) })
+          //   console.log('followed_user:', followed_user)
+          //   if (followed_user === null) {
+          //     throw new ErrorWithStatus({
+          //       message: USERS_MESSAGES.USER_NOT_FOUND,
+          //       status: HTTP_STATUS.NOT_FOUND
+          //     })
+          //   }
+          // }
+          options: async (value: string) => {
+            if (!ObjectId.isValid(value)) {
+              return Promise.reject(
+                new ErrorWithStatus({
+                  message: USERS_MESSAGES.INVALID_USER_ID,
+                  status: HTTP_STATUS.NOT_FOUND
+                })
+              )
+            }
+
+            const followed_user = await databaseService.users.findOne({ _id: new ObjectId(value) })
+
+            if (followed_user === null) {
+              return Promise.reject(
+                new ErrorWithStatus({
+                  message: USERS_MESSAGES.USER_NOT_FOUND,
+                  status: HTTP_STATUS.NOT_FOUND
+                })
+              )
+            }
+          }
+        }
+      }
+    },
+    ['params']
   )
 )

@@ -238,6 +238,47 @@ class UsersService {
     )
     return { message: USERS_MESSAGES.FOLLOW_SUCCESS }
   }
+  // async unfollow(user_id: string, followed_id: string) {
+  //   const follower = await databaseService.followers.findOne({
+  //     user_id: new ObjectId(user_id),
+  //     followed_id: new ObjectId(followed_id)
+  //   })
+  //   if (follower === null) {
+  //     return Promise.reject(
+  //       new ErrorWithStatus({ message: USERS_MESSAGES.ALREADY_UNFOLLOWED, status: HTTP_STATUS.NOT_FOUND })
+  //     )
+  //   }
+  //   await databaseService.followers.deleteOne({
+  //     user_id: new ObjectId(user_id),
+  //     followed_id: new ObjectId(followed_id)
+  //   })
+  //   return { message: USERS_MESSAGES.UNFOLLOW_SUCCESS }
+  // }
+  async unfollow(user_id: string, followed_id: string) {
+    try {
+      const follower = await databaseService.followers.findOne({
+        user_id: new ObjectId(user_id),
+        followed_id: new ObjectId(followed_id)
+      })
+
+      if (!follower) {
+        throw new ErrorWithStatus({
+          message: USERS_MESSAGES.ALREADY_UNFOLLOWED,
+          status: HTTP_STATUS.NOT_FOUND
+        })
+      }
+
+      await databaseService.followers.deleteOne({
+        user_id: new ObjectId(user_id),
+        followed_id: new ObjectId(followed_id)
+      })
+
+      return { message: USERS_MESSAGES.UNFOLLOW_SUCCESS }
+    } catch (error) {
+      console.error('Error in unfollow:', error)
+      throw error // Đảm bảo lỗi được ném ra để middleware Express xử lý
+    }
+  }
 }
 
 const usersService = new UsersService()

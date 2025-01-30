@@ -162,10 +162,31 @@ export const getProfileController = async (
 }
 export const followController = async (
   req: Request<ParamsDictionary, any, FollowReqBody>,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
-  const { user_id } = req.decoded_authorization as TokenPayload
-  const { followed_id } = req.body
-  const result = await usersService.follow(user_id, followed_id)
-  res.json(result)
+  try {
+    const { user_id } = req.decoded_authorization as TokenPayload
+    const { followed_id } = req.body
+    const result = await usersService.follow(user_id, followed_id)
+    res.json(result)
+  } catch (error) {
+    next(error)
+  }
+}
+export const unfollowController = async (
+  req: Request<ParamsDictionary, any, FollowReqBody>,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { user_id } = req.decoded_authorization as TokenPayload
+    const { user_id: followed_id } = req.params
+
+    const result = await usersService.unfollow(user_id, followed_id)
+
+    res.json(result)
+  } catch (error) {
+    next(error)
+  }
 }
