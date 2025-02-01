@@ -55,3 +55,9 @@ export interface GetProfileReqParams {
 export interface FollowReqBody {
   followed_id: string
 }
+
+export interface ChangePasswordReqBody {
+  old_password: string
+  password: string
+  confirm_password: string
+}

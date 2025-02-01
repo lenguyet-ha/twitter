@@ -279,6 +279,13 @@ class UsersService {
       throw error // Đảm bảo lỗi được ném ra để middleware Express xử lý
     }
   }
+  async changePassword(user_id: string, new_password: string) {
+    await databaseService.users.updateOne(
+      { _id: new ObjectId(user_id) },
+      { $set: { password: hashPassword(new_password), updated_at: new Date() } }
+    )
+    return { message: USERS_MESSAGES.CHANGE_PASSWORD_SUCCESS }
+  }
 }
 
 const usersService = new UsersService()

@@ -37,7 +37,7 @@ export const USERS_MESSAGES = {
   LOCATION_MUST_BE_STRING: 'Location must be a string',
   WEBSITE_MUST_BE_STRING: 'Website must be a string',
   USERNAME_MUST_BE_STRING: 'Username must be a string',
-  LOCATION_LENGTH_MUST_BE_FROM_1_TO_200: 'Location length must be from 1 to 200',
+  LOCATION_LENGTH_MUST_BE_FROM_1_TO_200: 'Location length must be from 1Í to 200',
   WEBSITE_LENGTH_MUST_BE_FROM_1_TO_200: 'Website length must be from 1 to 200',
   USERNAME_LENGTH_MUST_BE_FROM_1_TO_50: 'Username length must be from 1 to 50',
   IMAGE_URL_MUST_BE_STRING: 'Image url must be a string',
@@ -49,4 +49,6 @@ export const USERS_MESSAGES = {
   INVALID_USER_ID: 'Invalid user id',
   USERNAME_INVALID: 'Username is invalid',
   USERNAME_EXIST: 'Username already exists',
+  WRONG_PASSWORD: 'Wrong password',
+  CHANGE_PASSWORD_SUCCESS: 'Change password success'
 } as const

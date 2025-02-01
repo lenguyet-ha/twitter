@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { wrap } from 'module'
 import {
   emailVerifyController,
   followController,
@@ -12,7 +13,8 @@ import {
   resetPasswordController,
   updateMeController,
   unfollowController,
-  verifyForgotPasswordController
+  verifyForgotPasswordController,
+  changePasswordController
 } from '~/controllers/users.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
 
@@ -28,7 +30,8 @@ import {
   updateMeValidator,
   unfollowValidator,
   verifiedUserValidator,
-  verifyForgotPasswordTokenValidator
+  verifyForgotPasswordTokenValidator,
+  changePasswordValidator
 } from '~/middlewares/users.middlewares'
 import { UpdateMeReqBody } from '~/models/requests/User.requests'
 import { wrapRequestHandler } from '~/utils/handler'
@@ -78,5 +81,11 @@ usersRouter.delete(
   verifiedUserValidator,
   unfollowValidator,
   wrapRequestHandler(unfollowController)
+)
+usersRouter.patch(
+  '/changePassword',
+  accessTokenValidator,
+  changePasswordValidator,
+  wrapRequestHandler(changePasswordController)
 )
 export default usersRouter
