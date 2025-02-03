@@ -201,3 +201,16 @@ export const changePasswordController = async (
   const result = await usersService.changePassword(user_id, password)
   res.json(result)
 }
+export const oauthLoginController = async (req: Request, res: Response): Promise<void> => {
+  const { code } = req.query
+  console.log(req.url)
+
+  const result = await usersService.oauth(code as string)
+
+  if (!result) {
+    throw new Error('OAuth result is undefined')
+  }
+  const urlRedirect = `${process.env.CLIENT_REDIRECT_CALLBACK}?access_token=${result.access_token}&refresh_token=${result.refresh_token}&new_user=${result.newUser}&verify=${result.verify}`
+
+  return res.redirect(urlRedirect)
+}

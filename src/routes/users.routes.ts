@@ -14,7 +14,8 @@ import {
   updateMeController,
   unfollowController,
   verifyForgotPasswordController,
-  changePasswordController
+  changePasswordController,
+  oauthLoginController
 } from '~/controllers/users.controllers'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
 
@@ -88,4 +89,5 @@ usersRouter.patch(
   changePasswordValidator,
   wrapRequestHandler(changePasswordController)
 )
+usersRouter.get('/oauth/google', wrapRequestHandler(oauthLoginController))
 export default usersRouter
