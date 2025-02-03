@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import fs from 'fs'
-import { TEMP_UPLOAD_DIR, UPLOAD_DIR } from '~/constants/dir'
+import { TEMP_UPLOAD_DIR } from '~/constants/dir'
 import { UploadedFile } from '~/models/requests/Medias.request'
 export const initFolder = () => {
   if (!fs.existsSync(TEMP_UPLOAD_DIR)) {
@@ -16,7 +16,7 @@ export const handleUploadSingleImage = async (req: Request) => {
     uploadDir: TEMP_UPLOAD_DIR,
     maxFiles: 1,
     keepExtensions: true,
-    maxFileSize: 300 * 1024, // 300KB
+    maxFileSize: 4000 * 1024, // 300KB
     filter: function ({ name, originalFilename, mimetype }) {
       const valid = name === 'image' && Boolean(mimetype?.includes('image/'))
       if (!valid) {
@@ -39,6 +39,7 @@ export const handleUploadSingleImage = async (req: Request) => {
     })
   })
 }
+
 export const getNameFromFullname = (fullname: string) => {
   const namearr = fullname.split('.')
 

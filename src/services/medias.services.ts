@@ -9,14 +9,21 @@ import { Request } from 'express'
 class MediasService {
   async handleUploadSingleImage(req: Request) {
     const file: UploadedFile = await handleUploadSingleImage(req)
-    console.log('File:', file)
+    console.log(file.filepath)
+    //console.log('File:', file)
     const newName = getNameFromFullname(file.newFilename)
     const newPath = path.resolve(UPLOAD_DIR, `${newName}.jpg`)
-    console.log('newName:', newName)
-    console.log('newPath:', newPath)
-    await sharp(file.filepath).jpeg().toFile(newPath)
+    try {
+      console.log('Processing file with Sharp...')
+      await sharp(file.filepath).jpeg().toFile(newPath)
+      console.log('Sharp processing completed')
+    } catch (err) {
+      console.error('LỖI Sharp:', err)
+      throw new Error('Lỗi khi xử lý ảnh với Sharp')
+    }
+
+    console.log('File:', file)
     fs.unlinkSync(file.filepath)
-    console.log('file.path:', file.filepath)
     return `http://localhost:3000/uploads/${newName}.jpg`
   }
 }
