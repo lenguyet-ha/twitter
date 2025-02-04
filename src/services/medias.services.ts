@@ -23,7 +23,9 @@ class MediasService {
     }
 
     fs.unlinkSync(file.filepath)
-    return isProduction ? `https://twitter-api/medias/${newName}.jpg` : `http://localhost:4000/medias/${newName}.jpg`
+    return isProduction
+      ? `https://twitter-api/static/image/${newName}.jpg`
+      : `http://localhost:4000/static/image/${newName}.jpg`
   }
 }
 const mediasService = new MediasService()
