@@ -5,12 +5,12 @@ import { UPLOAD_DIR } from '~/constants/dir'
 import { getNameFromFullname, handleUploadSingleImage } from '~/utils/file'
 import { UploadedFile } from '~/models/requests/Medias.request'
 import { Request } from 'express'
+import { isProduction } from '~/constants/config'
 
 class MediasService {
   async handleUploadSingleImage(req: Request) {
     const file: UploadedFile = await handleUploadSingleImage(req)
-    console.log(file.filepath)
-    //console.log('File:', file)
+
     const newName = getNameFromFullname(file.newFilename)
     const newPath = path.resolve(UPLOAD_DIR, `${newName}.jpg`)
     try {
@@ -22,9 +22,8 @@ class MediasService {
       throw new Error('Lỗi khi xử lý ảnh với Sharp')
     }
 
-    console.log('File:', file)
     fs.unlinkSync(file.filepath)
-    return `http://localhost:3000/uploads/${newName}.jpg`
+    return isProduction ? `https://twitter-api/medias/${newName}.jpg` : `http://localhost:4000/medias/${newName}.jpg`
   }
 }
 const mediasService = new MediasService()
